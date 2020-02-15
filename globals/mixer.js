@@ -16,11 +16,12 @@
 
 'use strict';
 
-import { Sound } from "./sound.js";
+import { Sound } from "./../modules/sound.js"
+import { bindOnDocumentReady } from "./../../../include/event.js"
 
 /** @typedef {Object<string, Sound>} SoundList */ var SoundList;
 
-export class Mixer {
+export class MixerImpl {
 	/** @param {HTMLElement} domContainer */
 	constructor(domContainer) {
 		this.domContainer = domContainer;
@@ -104,3 +105,17 @@ export class Mixer {
 		this.dictSoundFx = {};
 	}
 }
+
+/** @type {MixerImpl | null} */
+export let Mixer = null;
+
+function initializeMixer() {
+	if (platform.document !== undefined) {
+		let domMixer = /** @type {HTMLElement} */ ( platform.document.createElement('div') );
+		domMixer.style.display = 'none';
+		platform.document.body.appendChild(domMixer);
+		Mixer = new MixerImpl(domMixer);
+	}
+}
+
+bindOnDocumentReady(initializeMixer);

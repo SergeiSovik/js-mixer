@@ -19,7 +19,7 @@
 import { getTickCounter } from "./../../../include/time.js"
 import { bindEvent, unbindEvent } from "./../../../include/event.js"
 import { SoundImpl } from "./../../../include/sound.js"
-import { Mixer } from "./mixer.js"
+import { MixerImpl } from "./../globals/mixer.js"
 
 export const VOLUME_MIN = 0.00000001;
 export const VOLUME_MAX = 1;
@@ -93,7 +93,7 @@ function evEnded() {
 export class Sound extends SoundImpl {
 	/**
 		* @param {string} sKey 
-		* @param {Mixer} oMixer 
+		* @param {MixerImpl} oMixer 
 		* @param {HTMLAudioElement} domAudio 
 		*/
 	constructor(sKey, oMixer, domAudio) {
