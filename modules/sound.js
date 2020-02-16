@@ -92,7 +92,7 @@ function evEnded() {
 
 export class Sound extends SoundImpl {
 	/**
-		* @param {string} sKey 
+		* @param {string | null} sKey 
 		* @param {MixerImpl} oMixer 
 		* @param {HTMLAudioElement} domAudio 
 		*/

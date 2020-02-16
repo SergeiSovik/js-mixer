@@ -17,7 +17,6 @@
 'use strict';
 
 import { Sound } from "./../modules/sound.js"
-import { bindOnDocumentReady } from "./../../../include/event.js"
 
 /** @typedef {Object<string, Sound>} SoundList */ var SoundList;
 
@@ -60,16 +59,21 @@ export class MixerImpl {
 	}
 
 	/**
-		* @param {string} sKey 
+		* @param {string | null} sKey 
 		* @param {HTMLAudioElement} domAudio 
 		* @return {Sound}
 		*/
 	createSound(sKey, domAudio) {
-		if (this.dictSounds[sKey] !== undefined)
-			this.dictSounds[sKey].release();
+		let oSound = new Sound(sKey, this, domAudio);
 
-		this.dictSounds[sKey] = new Sound(sKey, this, domAudio);
-		return this.dictSounds[sKey];
+		if (sKey !== null) {
+			if (this.dictSounds[sKey] !== undefined)
+				this.dictSounds[sKey].release();
+
+			this.dictSounds[sKey] = oSound;
+		}
+
+		return oSound;
 	}
 
 	/**
@@ -107,15 +111,13 @@ export class MixerImpl {
 }
 
 /** @type {MixerImpl | null} */
-export let Mixer = null;
+export let Mixer = initializeMixer();
 
 function initializeMixer() {
 	if (platform.document !== undefined) {
 		let domMixer = /** @type {HTMLElement} */ ( platform.document.createElement('div') );
 		domMixer.style.display = 'none';
 		platform.document.body.appendChild(domMixer);
-		Mixer = new MixerImpl(domMixer);
+		return new MixerImpl(domMixer);
 	}
 }
-
-bindOnDocumentReady(initializeMixer);
